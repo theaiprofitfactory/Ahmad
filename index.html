@@ -7,20 +7,27 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
 body{margin:0;font-family:Poppins,sans-serif;background:#f4f4f4}
-header{background:#111;color:#fff;padding:15px 40px;position:sticky;top:0}
+header{background:#111;color:#fff;padding:15px 40px;position:sticky;top:0;z-index:10}
 nav{display:flex;justify-content:space-between;align-items:center}
 nav ul{list-style:none;display:flex;gap:20px}
 nav a{color:#fff;text-decoration:none}
 .hero{background:linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.6)),url('https://images.unsplash.com/photo-1505691938895-1758d7feb511');background-size:cover;padding:90px 20px;text-align:center;color:#fff}
 .hero h1{font-size:42px}
-.products-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:25px;padding:40px;max-width:1200px;margin:auto}
+.products-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:25px;padding:40px;max-width:1200px;margin:auto}
 .product-card{background:#fff;border-radius:14px;box-shadow:0 10px 25px rgba(0,0,0,.1);overflow:hidden}
-.product-card img{width:100%;height:220px;object-fit:cover}
+.product-card img{width:100%;height:200px;object-fit:cover}
 .card-body{text-align:center;padding:15px}
 .price{font-weight:600;margin:10px 0}
 button{background:#000;color:#fff;border:none;padding:10px 18px;border-radius:25px;cursor:pointer}
-#cart{max-width:900px;margin:40px auto;background:#fff;padding:20px;border-radius:12px}
-input,textarea{width:100%;padding:10px;margin:8px 0}
+
+/* CART SIDEBAR */
+#cartSidebar{position:fixed;right:-420px;top:0;width:380px;height:100%;background:#fff;box-shadow:-5px 0 20px rgba(0,0,0,.2);padding:20px;transition:.4s;z-index:20;overflow-y:auto}
+#cartSidebar.open{right:0}
+.cart-item{border-bottom:1px solid #ddd;padding:10px 0;font-size:14px}
+.cart-total{font-weight:600;margin:15px 0}
+.close-cart{background:#ddd;color:#000;border-radius:20px;margin-bottom:10px}
+
+input,textarea{width:100%;padding:10px;margin:6px 0}
 footer{background:#111;color:#fff;text-align:center;padding:30px;margin-top:40px}
 </style>
 </head>
@@ -31,7 +38,7 @@ footer{background:#111;color:#fff;text-align:center;padding:30px;margin-top:40px
 <ul>
 <li><a href="#">Home</a></li>
 <li><a href="#products">Shop</a></li>
-<li><a href="#cart">Cart</a></li>
+<li><a href="javascript:toggleCart()">Cart 🛒</a></li>
 </ul>
 </nav>
 </header>
@@ -46,17 +53,19 @@ footer{background:#111;color:#fff;text-align:center;padding:30px;margin-top:40px
 <div class="products-grid" id="productsGrid"></div>
 </section>
 
-<section id="cart">
+<!-- CART SIDEBAR -->
+<div id="cartSidebar">
+<button class="close-cart" onclick="toggleCart()">Close ✖</button>
 <h2>Your Cart</h2>
-<ul id="cartItems"></ul>
-<h3>Total: Rs. <span id="total">0</span></h3>
+<div id="cartItems"></div>
+<div class="cart-total">Total: Rs. <span id="total">0</span></div>
 
-<h2>Order Form</h2>
+<h3>Order Details</h3>
 <input id="name" placeholder="Your Name">
 <input id="phone" placeholder="Phone Number">
 <textarea id="address" placeholder="Full Address"></textarea>
 <button onclick="placeOrder()">Place Order on WhatsApp</button>
-</section>
+</div>
 
 <footer>
 <p>© WallArt PK | Cash on Delivery Available</p>
@@ -86,7 +95,7 @@ const products=[
 {name:'Luxury Home Decor Panel',price:8500,img:'https://images.unsplash.com/photo-1505691938895-1758d7feb511'}];
 
 const grid=document.getElementById('productsGrid');
-const cartItems=[];
+const cart=[];
 let total=0;
 
 products.forEach((p,i)=>{
@@ -99,16 +108,19 @@ products.forEach((p,i)=>{
  </div></div>`;
 });
 
+function toggleCart(){document.getElementById('cartSidebar').classList.toggle('open')}
+
 function addToCart(i){
- cartItems.push(products[i]);
+ cart.push(products[i]);
  total+=products[i].price;
  renderCart();
+ document.getElementById('cartSidebar').classList.add('open');
 }
 
 function renderCart(){
- const ul=document.getElementById('cartItems');
- ul.innerHTML='';
- cartItems.forEach(p=>{ul.innerHTML+=`<li>${p.name} - Rs. ${p.price}</li>`});
+ const div=document.getElementById('cartItems');
+ div.innerHTML='';
+ cart.forEach(p=>{div.innerHTML+=`<div class='cart-item'>${p.name} – Rs. ${p.price}</div>`});
  document.getElementById('total').innerText=total;
 }
 
@@ -117,7 +129,7 @@ function placeOrder(){
  const phone=document.getElementById('phone').value;
  const address=document.getElementById('address').value;
  let msg=`Order from ${name}%0APhone: ${phone}%0AAddress: ${address}%0AItems:%0A`;
- cartItems.forEach(p=>msg+=`- ${p.name} (${p.price})%0A`);
+ cart.forEach(p=>msg+=`- ${p.name} (${p.price})%0A`);
  msg+=`Total: Rs. ${total}`;
  window.open(`https://wa.me/923457823510?text=${msg}`);
 }
