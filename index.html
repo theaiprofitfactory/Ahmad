@@ -71,6 +71,7 @@ footer{background:#111;color:#fff;text-align:center;padding:30px;margin-top:40px
 </footer>
 
 <script>
+// ====== SAFE PRODUCT RENDER FIX ======
 const products=[
 {name:'Allah Calligraphy Metal Art',price:4999,img:'https://images.unsplash.com/photo-1545235617-9465d2a55698'},
 {name:'Muhammad (PBUH) Wall Art',price:5499,img:'https://images.unsplash.com/photo-1493666438817-866a91353ca9'},
@@ -91,30 +92,33 @@ const products=[
 {name:'Floral Metal Frame',price:4400,img:'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85'},
 {name:'Premium Wall Clock Art',price:6200,img:'https://images.unsplash.com/photo-1493666438817-866a91353ca9'},
 {name:'Islamic Quote Art',price:4900,img:'https://images.unsplash.com/photo-1524758631624-e2822e304c36'},
-{name:'Luxury Home Decor Panel',price:8500,img:'https://images.unsplash.com/photo-1505691938895-1758d7feb511'}];
+{name:'Luxury Home Decor Panel',price:8500,img:'https://images.unsplash.com/photo-1505691938895-1758d7feb511'}
+];
 
-const grid=document.getElementById('productsGrid');
-let cart=[];
-let total=0;
+let cart=[]; let total=0;
 
-document.addEventListener('DOMContentLoaded',()=>{
-products.forEach((p,i)=>{
- grid.innerHTML+=`<div class='product-card'>
- <span class='badge'>New</span>
- <img src='${p.img}'>
- <div class='card-body'>
- <h3>${p.name}</h3>
- <div class='price'>Rs. ${p.price}</div>
- <button onclick='addToCart(${i})'>Add to Cart</button>
- </div></div>`;
-});
-});
+window.onload=function(){
+ const grid=document.getElementById('productsGrid');
+ if(!grid){console.error('productsGrid not found');return;}
+ grid.innerHTML='';
+ products.forEach((p,i)=>{
+  grid.innerHTML+=`<div class='product-card'>
+   <span class='badge'>New</span>
+   <img src='${p.img}'>
+   <div class='card-body'>
+    <h3>${p.name}</h3>
+    <div class='price'>Rs. ${p.price}</div>
+    <button onclick='addToCart(${i})'>Add to Cart</button>
+   </div>
+  </div>`;
+ });
+};
 
 function toggleCart(){document.getElementById('cartSidebar').classList.toggle('open')}
 
 function addToCart(i){
  const item=cart.find(c=>c.name===products[i].name);
- if(item){item.qty++}else{cart.push({...products[i],qty:1})}
+ if(item){item.qty++;}else{cart.push({...products[i],qty:1});}
  renderCart();
  document.getElementById('cartSidebar').classList.add('open');
 }
@@ -124,49 +128,27 @@ function renderCart(){
  div.innerHTML=''; total=0;
  cart.forEach((p,idx)=>{
   total+=p.price*p.qty;
-  div.innerHTML+=`<div class='cart-item'>
-   ${p.name} (x${p.qty}) - Rs. ${p.price*p.qty}
+  div.innerHTML+=`<div class='cart-item'>${p.name} (x${p.qty}) - Rs. ${p.price*p.qty}
    <button onclick='changeQty(${idx},1)'>+</button>
    <button onclick='changeQty(${idx},-1)'>-</button>
-   <button onclick='removeItem(${idx})'>✖</button>
-  </div>`;
+   <button onclick='removeItem(${idx})'>✖</button></div>`;
  });
  document.getElementById('total').innerText=total;
 }
 
-function changeQty(i,val){cart[i].qty+=val;if(cart[i].qty<=0)cart.splice(i,1);renderCart()}
-function removeItem(i){cart.splice(i,1);renderCart()}
+function changeQty(i,v){cart[i].qty+=v;if(cart[i].qty<=0)cart.splice(i,1);renderCart();}
+function removeItem(i){cart.splice(i,1);renderCart();}
 
 function placeOrder(){
  const name=document.getElementById('name').value.trim();
  const phone=document.getElementById('phone').value.trim();
  const address=document.getElementById('address').value.trim();
- if(!name || !phone || !address){
-  alert('Please fill Name, Phone and Address');
-  return;
- }
- if(cart.length===0){
-  alert('Your cart is empty');
-  return;
- }
- let msg = `🛒 *New Order – WallArt PK*%0A%0A`;
- msg += `👤 Name: ${name}%0A`;
- msg += `📞 Phone: ${phone}%0A`;
- msg += `📍 Address: ${address}%0A%0A`;
- msg += `📦 *Items:*%0A`;
- cart.forEach(p=>{
-  msg += `- ${p.name} x${p.qty} = Rs. ${p.price*p.qty}%0A`;
- });
- msg += `%0A💰 *Total:* Rs. ${total}`;
- window.open(`https://wa.me/923457823510?text=${msg}`,'_blank');
- cart=[];
- renderCart();
- toggleCart();
- alert('Thank you for your order! We will contact you shortly.');
-}%0APhone: ${phone}%0AAddress: ${address}%0AItems:%0A`;
+ if(!name||!phone||!address||cart.length===0){alert('Please complete order details');return;}
+ let msg=`🛒 New Order – WallArt PK%0AName: ${name}%0APhone: ${phone}%0AAddress: ${address}%0A%0AItems:%0A`;
  cart.forEach(p=>msg+=`- ${p.name} x${p.qty} = Rs. ${p.price*p.qty}%0A`);
  msg+=`Total: Rs. ${total}`;
- window.open(`https://wa.me/923457823510?text=${msg}`);
+ window.open(`https://wa.me/923457823510?text=${msg}`,'_blank');
+ cart=[]; renderCart(); toggleCart();
 }
 </script>
 </body>
