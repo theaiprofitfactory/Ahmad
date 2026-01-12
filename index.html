@@ -1,91 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>WallArt PK – Premium Metal Wall Art</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-  <style>
-    body {font-family: 'Poppins', sans-serif; margin:0; background:#f4f4f4;}
-    header {background:#0f0f0f; color:#fff; padding:18px 40px; position:sticky; top:0;}
-    nav {display:flex; justify-content:space-between; align-items:center;}
-    nav ul {list-style:none; display:flex; gap:25px;}
-    nav a {color:#fff; text-decoration:none; font-weight:500;}
-    .hero {padding:80px 20px; text-align:center; background:linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.6)), url('https://images.unsplash.com/photo-1616627988620-8b5c5d6b6b8b'); background-size:cover; color:#fff;}
-    .hero h1 {font-size:42px; margin-bottom:10px;}
-    .products-grid {display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:25px; padding:40px; max-width:1200px; margin:auto;}
-    .product-card {background:#fff; border-radius:14px; box-shadow:0 10px 25px rgba(0,0,0,0.1); overflow:hidden; transition:.3s;}
-    .product-card:hover {transform:translateY(-6px)}
-    .product-card img {width:100%; height:220px; object-fit:cover;}
-    .card-body {padding:15px; text-align:center;}
-    .card-body h3 {font-size:16px; margin:10px 0;}
-    .price {font-weight:600; margin-bottom:12px;}
-    button {background:#000; color:#fff; border:none; padding:10px 18px; border-radius:25px; cursor:pointer;}
-    footer {background:#0f0f0f; color:#fff; text-align:center; padding:30px; margin-top:40px;}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WallArt PK – Premium Metal Wall Art</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:Poppins,sans-serif;background:#f4f4f4}
+header{background:#111;color:#fff;padding:15px 40px;position:sticky;top:0}
+nav{display:flex;justify-content:space-between;align-items:center}
+nav ul{list-style:none;display:flex;gap:20px}
+nav a{color:#fff;text-decoration:none}
+.hero{background:linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.6)),url('https://images.unsplash.com/photo-1505691938895-1758d7feb511');background-size:cover;padding:90px 20px;text-align:center;color:#fff}
+.hero h1{font-size:42px}
+.products-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:25px;padding:40px;max-width:1200px;margin:auto}
+.product-card{background:#fff;border-radius:14px;box-shadow:0 10px 25px rgba(0,0,0,.1);overflow:hidden}
+.product-card img{width:100%;height:220px;object-fit:cover}
+.card-body{text-align:center;padding:15px}
+.price{font-weight:600;margin:10px 0}
+button{background:#000;color:#fff;border:none;padding:10px 18px;border-radius:25px;cursor:pointer}
+#cart{max-width:900px;margin:40px auto;background:#fff;padding:20px;border-radius:12px}
+input,textarea{width:100%;padding:10px;margin:8px 0}
+footer{background:#111;color:#fff;text-align:center;padding:30px;margin-top:40px}
+</style>
 </head>
 <body>
 <header>
-  <nav>
-    <div class="logo">WallArt PK</div>
-    <ul>
-      <li><a href="#">Home</a></li>
-      <li><a href="#products">Shop</a></li>
-      <li><a href="#">Contact</a></li>
-    </ul>
-  </nav>
+<nav>
+<div class="logo">WallArt PK</div>
+<ul>
+<li><a href="#">Home</a></li>
+<li><a href="#products">Shop</a></li>
+<li><a href="#cart">Cart</a></li>
+</ul>
+</nav>
 </header>
 
 <section class="hero">
-  <h1>Premium Metal Wall Art</h1>
-  <p>Apni deewaron ko premium metal art se badlein</p>
+<h1>Premium Metal Wall Art</h1>
+<p>Apni deewaron ko premium metal art se badlein</p>
 </section>
 
 <section id="products">
-  <h2 style="text-align:center;margin-top:40px">Our Products</h2>
-  <div class="products-grid" id="featured-products"></div>
+<h2 style="text-align:center">Our Products</h2>
+<div class="products-grid" id="productsGrid"></div>
+</section>
+
+<section id="cart">
+<h2>Your Cart</h2>
+<ul id="cartItems"></ul>
+<h3>Total: Rs. <span id="total">0</span></h3>
+
+<h2>Order Form</h2>
+<input id="name" placeholder="Your Name">
+<input id="phone" placeholder="Phone Number">
+<textarea id="address" placeholder="Full Address"></textarea>
+<button onclick="placeOrder()">Place Order on WhatsApp</button>
 </section>
 
 <footer>
-  <p>WhatsApp Orders: +92 345 7823510</p>
+<p>© WallArt PK | Cash on Delivery Available</p>
 </footer>
 
 <script>
-const products = [
- {name:"Allah Calligraphy Metal Art", price:"Rs. 4,999", image:"https://images.unsplash.com/photo-1600585154340-be6161a56a0c"},
- {name:"Muhammad (PBUH) Wall Art", price:"Rs. 5,499", image:"https://images.unsplash.com/photo-1598300056393-4aac492f4344"},
- {name:"Ayat-ul-Kursi Frame", price:"Rs. 6,999", image:"https://images.unsplash.com/photo-1616627988620-8b5c5d6b6b8b"},
- {name:"Bismillah Metal Art", price:"Rs. 3,999", image:"https://images.unsplash.com/photo-1524758631624-e2822e304c36"},
- {name:"Modern Leaf Design", price:"Rs. 3,499", image:"https://images.unsplash.com/photo-1505693416388-ac5ce068fe85"},
- {name:"Abstract Circle Art", price:"Rs. 4,200", image:"https://images.unsplash.com/photo-1519710164239-da123dc03ef4"},
- {name:"Golden Islamic Frame", price:"Rs. 7,500", image:"https://images.unsplash.com/photo-1540518614846-7eded433c457"},
- {name:"Minimal Wall Panel", price:"Rs. 3,200", image:"https://images.unsplash.com/photo-1582582429416-08f4c9c7d3f0"},
- {name:"Kaaba Metal Art", price:"Rs. 6,800", image:"https://images.unsplash.com/photo-1500530855697-b586d89ba3ee"},
- {name:"Masjid Nabvi Art", price:"Rs. 6,800", image:"https://images.unsplash.com/photo-1560185127-6ed189bf02b2"},
- {name:"Geometric Wall Art", price:"Rs. 4,100", image:"https://images.unsplash.com/photo-1502005097973-6a7082348e28"},
- {name:"Islamic Pattern Frame", price:"Rs. 5,000", image:"https://images.unsplash.com/photo-1505691938895-1758d7feb511"},
- {name:"Tree of Life Metal Art", price:"Rs. 4,700", image:"https://images.unsplash.com/photo-1493666438817-866a91353ca9"},
- {name:"Luxury Calligraphy Set", price:"Rs. 9,999", image:"https://images.unsplash.com/photo-1522708323590-d24dbb6b0267"},
- {name:"Modern Line Art", price:"Rs. 3,600", image:"https://images.unsplash.com/photo-1545235617-9465d2a55698"},
- {name:"Arabic Typography Art", price:"Rs. 5,300", image:"https://images.unsplash.com/photo-1519710164239-da123dc03ef4"},
- {name:"Floral Metal Frame", price:"Rs. 4,400", image:"https://images.unsplash.com/photo-1519710164239-da123dc03ef4"},
- {name:"Premium Wall Clock Art", price:"Rs. 6,200", image:"https://images.unsplash.com/photo-1493666438817-866a91353ca9"},
- {name:"Islamic Quote Art", price:"Rs. 4,900", image:"https://images.unsplash.com/photo-1524758631624-e2822e304c36"},
- {name:"Luxury Home Decor Panel", price:"Rs. 8,500", image:"https://images.unsplash.com/photo-1505691938895-1758d7feb511"}
-];
+const products=[
+{name:'Allah Calligraphy Metal Art',price:4999,img:'https://images.unsplash.com/photo-1545235617-9465d2a55698'},
+{name:'Muhammad (PBUH) Wall Art',price:5499,img:'https://images.unsplash.com/photo-1493666438817-866a91353ca9'},
+{name:'Ayat-ul-Kursi Frame',price:6999,img:'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85'},
+{name:'Bismillah Metal Art',price:3999,img:'https://images.unsplash.com/photo-1519710164239-da123dc03ef4'},
+{name:'Modern Leaf Design',price:3499,img:'https://images.unsplash.com/photo-1524758631624-e2822e304c36'},
+{name:'Abstract Circle Art',price:4200,img:'https://images.unsplash.com/photo-1502005097973-6a7082348e28'},
+{name:'Golden Islamic Frame',price:7500,img:'https://images.unsplash.com/photo-1540518614846-7eded433c457'},
+{name:'Minimal Wall Panel',price:3200,img:'https://images.unsplash.com/photo-1582582429416-08f4c9c7d3f0'},
+{name:'Kaaba Metal Art',price:6800,img:'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee'},
+{name:'Masjid Nabvi Art',price:6800,img:'https://images.unsplash.com/photo-1560185127-6ed189bf02b2'},
+{name:'Geometric Wall Art',price:4100,img:'https://images.unsplash.com/photo-1505691938895-1758d7feb511'},
+{name:'Islamic Pattern Frame',price:5000,img:'https://images.unsplash.com/photo-1505691938895-1758d7feb511'},
+{name:'Tree of Life Metal Art',price:4700,img:'https://images.unsplash.com/photo-1493666438817-866a91353ca9'},
+{name:'Luxury Calligraphy Set',price:9999,img:'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267'},
+{name:'Modern Line Art',price:3600,img:'https://images.unsplash.com/photo-1545235617-9465d2a55698'},
+{name:'Arabic Typography Art',price:5300,img:'https://images.unsplash.com/photo-1519710164239-da123dc03ef4'},
+{name:'Floral Metal Frame',price:4400,img:'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85'},
+{name:'Premium Wall Clock Art',price:6200,img:'https://images.unsplash.com/photo-1493666438817-866a91353ca9'},
+{name:'Islamic Quote Art',price:4900,img:'https://images.unsplash.com/photo-1524758631624-e2822e304c36'},
+{name:'Luxury Home Decor Panel',price:8500,img:'https://images.unsplash.com/photo-1505691938895-1758d7feb511'}];
 
-const container = document.getElementById("featured-products");
-products.forEach(p => {
-  container.innerHTML += `
-    <div class="product-card">
-      <img src="${p.image}" alt="${p.name}">
-      <div class="card-body">
-        <h3>${p.name}</h3>
-        <div class="price">${p.price}</div>
-        <button onclick="window.open('https://wa.me/923457823510?text=I want to order: ${p.name}')">Order on WhatsApp</button>
-      </div>
-    </div>`;
+const grid=document.getElementById('productsGrid');
+const cartItems=[];
+let total=0;
+
+products.forEach((p,i)=>{
+ grid.innerHTML+=`<div class='product-card'>
+ <img src='${p.img}'>
+ <div class='card-body'>
+ <h3>${p.name}</h3>
+ <div class='price'>Rs. ${p.price}</div>
+ <button onclick='addToCart(${i})'>Add to Cart</button>
+ </div></div>`;
 });
+
+function addToCart(i){
+ cartItems.push(products[i]);
+ total+=products[i].price;
+ renderCart();
+}
+
+function renderCart(){
+ const ul=document.getElementById('cartItems');
+ ul.innerHTML='';
+ cartItems.forEach(p=>{ul.innerHTML+=`<li>${p.name} - Rs. ${p.price}</li>`});
+ document.getElementById('total').innerText=total;
+}
+
+function placeOrder(){
+ const name=document.getElementById('name').value;
+ const phone=document.getElementById('phone').value;
+ const address=document.getElementById('address').value;
+ let msg=`Order from ${name}%0APhone: ${phone}%0AAddress: ${address}%0AItems:%0A`;
+ cartItems.forEach(p=>msg+=`- ${p.name} (${p.price})%0A`);
+ msg+=`Total: Rs. ${total}`;
+ window.open(`https://wa.me/923457823510?text=${msg}`);
+}
 </script>
 </body>
 </html>
