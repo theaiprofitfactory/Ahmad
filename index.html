@@ -7,30 +7,30 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
 body{margin:0;font-family:Poppins,sans-serif;background:#f4f4f4}
-header{background:#111;color:#fff;padding:15px 40px;position:sticky;top:0;z-index:10}
+header{background:#111;color:#fff;padding:15px 40px;position:sticky;top:0}
 nav{display:flex;justify-content:space-between;align-items:center}
 nav ul{list-style:none;display:flex;gap:20px}
 nav a{color:#fff;text-decoration:none}
 .hero{background:linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.6)),url('https://images.unsplash.com/photo-1505691938895-1758d7feb511');background-size:cover;padding:90px 20px;text-align:center;color:#fff}
-.hero h1{font-size:42px}
 .products-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:25px;padding:40px;max-width:1200px;margin:auto}
-.product-card{background:#fff;border-radius:14px;box-shadow:0 10px 25px rgba(0,0,0,.1);overflow:hidden;position:relative}
-.badge{position:absolute;top:10px;left:10px;background:#e63946;color:#fff;padding:4px 10px;border-radius:20px;font-size:12px}
+.product-card{background:#fff;border-radius:14px;box-shadow:0 10px 25px rgba(0,0,0,.1);overflow:hidden}
 .product-card img{width:100%;height:200px;object-fit:cover}
 .card-body{text-align:center;padding:15px}
 .price{font-weight:600;margin:10px 0}
 button{background:#000;color:#fff;border:none;padding:10px 18px;border-radius:25px;cursor:pointer}
 
-#cartSidebar{position:fixed;right:-420px;top:0;width:380px;height:100%;background:#fff;box-shadow:-5px 0 20px rgba(0,0,0,.2);padding:20px;transition:.4s;z-index:20;overflow-y:auto}
+#cartSidebar{position:fixed;right:-420px;top:0;width:380px;height:100%;background:#fff;box-shadow:-5px 0 20px rgba(0,0,0,.2);padding:20px;transition:.4s;overflow-y:auto}
 #cartSidebar.open{right:0}
 .cart-item{border-bottom:1px solid #ddd;padding:10px 0;font-size:14px}
 .cart-item button{background:#ddd;color:#000;padding:4px 8px;border-radius:8px;margin-left:5px}
-.cart-total{font-weight:600;margin:15px 0}
-.close-cart{background:#ddd;color:#000;border-radius:20px;margin-bottom:10px}
 input,textarea{width:100%;padding:10px;margin:6px 0}
-footer{background:#111;color:#fff;text-align:center;padding:30px;margin-top:40px}
+footer{background:#111;color:#fff;text-align:center;padding:30px}
+
+#thankYou{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:50;align-items:center;justify-content:center}
+#thankYou div{background:#fff;padding:40px;border-radius:20px;text-align:center}
 </style>
 </head>
+
 <body>
 <header>
 <nav>
@@ -49,15 +49,14 @@ footer{background:#111;color:#fff;text-align:center;padding:30px;margin-top:40px
 </section>
 
 <section id="products">
-<h2 style="text-align:center">Our Products</h2>
 <div class="products-grid" id="productsGrid"></div>
 </section>
 
 <div id="cartSidebar">
-<button class="close-cart" onclick="toggleCart()">Close ✖</button>
+<button onclick="toggleCart()">Close ✖</button>
 <h2>Your Cart</h2>
 <div id="cartItems"></div>
-<div class="cart-total">Total: Rs. <span id="total">0</span></div>
+<h3>Total: Rs <span id="total">0</span></h3>
 
 <h3>Order Details</h3>
 <input id="name" placeholder="Your Name">
@@ -66,84 +65,72 @@ footer{background:#111;color:#fff;text-align:center;padding:30px;margin-top:40px
 <button onclick="placeOrder()">Place Order on WhatsApp</button>
 </div>
 
+<div id="thankYou">
+<div>
+<h2>🎉 Thank You for Your Order!</h2>
+<p>Our team will contact you shortly.</p>
+<button onclick="closeThankYou()">Continue Shopping</button>
+</div>
+</div>
+
 <footer>
 <p>© WallArt PK | Cash on Delivery Available</p>
 </footer>
 
 <script>
 const products=[
-{name:'Allah Calligraphy Metal Art',price:4999,img:'https://images.unsplash.com/photo-1545235617-9465d2a55698'},
-{name:'Muhammad (PBUH) Wall Art',price:5499,img:'https://images.unsplash.com/photo-1493666438817-866a91353ca9'},
-{name:'Ayat-ul-Kursi Frame',price:6999,img:'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85'},
-{name:'Bismillah Metal Art',price:3999,img:'https://images.unsplash.com/photo-1519710164239-da123dc03ef4'},
-{name:'Modern Leaf Design',price:3499,img:'https://images.unsplash.com/photo-1524758631624-e2822e304c36'},
-{name:'Abstract Circle Art',price:4200,img:'https://images.unsplash.com/photo-1502005097973-6a7082348e28'},
-{name:'Golden Islamic Frame',price:7500,img:'https://images.unsplash.com/photo-1540518614846-7eded433c457'},
-{name:'Minimal Wall Panel',price:3200,img:'https://images.unsplash.com/photo-1582582429416-08f4c9c7d3f0'},
-{name:'Kaaba Metal Art',price:6800,img:'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee'},
-{name:'Masjid Nabvi Art',price:6800,img:'https://images.unsplash.com/photo-1560185127-6ed189bf02b2'},
-{name:'Geometric Wall Art',price:4100,img:'https://images.unsplash.com/photo-1505691938895-1758d7feb511'},
-{name:'Islamic Pattern Frame',price:5000,img:'https://images.unsplash.com/photo-1505691938895-1758d7feb511'},
-{name:'Tree of Life Metal Art',price:4700,img:'https://images.unsplash.com/photo-1493666438817-866a91353ca9'},
-{name:'Luxury Calligraphy Set',price:9999,img:'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267'},
-{name:'Modern Line Art',price:3600,img:'https://images.unsplash.com/photo-1545235617-9465d2a55698'},
-{name:'Arabic Typography Art',price:5300,img:'https://images.unsplash.com/photo-1519710164239-da123dc03ef4'},
-{name:'Floral Metal Frame',price:4400,img:'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85'},
-{name:'Premium Wall Clock Art',price:6200,img:'https://images.unsplash.com/photo-1493666438817-866a91353ca9'},
-{name:'Islamic Quote Art',price:4900,img:'https://images.unsplash.com/photo-1524758631624-e2822e304c36'},
-{name:'Luxury Home Decor Panel',price:8500,img:'https://images.unsplash.com/photo-1505691938895-1758d7feb511'}];
+{name:'Allah Calligraphy',price:4999,img:'https://images.unsplash.com/photo-1545235617-9465d2a55698'},
+{name:'Muhammad (PBUH)',price:5499,img:'https://images.unsplash.com/photo-1493666438817-866a91353ca9'},
+{name:'Ayat-ul-Kursi',price:6999,img:'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85'},
+{name:'Bismillah Art',price:3999,img:'https://images.unsplash.com/photo-1519710164239-da123dc03ef4'},
+{name:'Modern Leaf',price:3499,img:'https://images.unsplash.com/photo-1524758631624-e2822e304c36'},
+{name:'Abstract Circle',price:4200,img:'https://images.unsplash.com/photo-1502005097973-6a7082348e28'},
+{name:'Golden Frame',price:7500,img:'https://images.unsplash.com/photo-1540518614846-7eded433c457'},
+{name:'Minimal Panel',price:3200,img:'https://images.unsplash.com/photo-1582582429416-08f4c9c7d3f0'}
+];
 
+let cart=[],total=0;
 const grid=document.getElementById('productsGrid');
-let cart=[];
-let total=0;
 
 products.forEach((p,i)=>{
- grid.innerHTML+=`<div class='product-card'>
- <span class='badge'>New</span>
- <img src='${p.img}'>
- <div class='card-body'>
- <h3>${p.name}</h3>
- <div class='price'>Rs. ${p.price}</div>
- <button onclick='addToCart(${i})'>Add to Cart</button>
- </div></div>`;
+grid.innerHTML+=`<div class='product-card'>
+<img src='${p.img}'><div class='card-body'>
+<h3>${p.name}</h3><div class='price'>Rs ${p.price}</div>
+<button onclick='addToCart(${i})'>Add to Cart</button>
+</div></div>`;
 });
 
 function toggleCart(){document.getElementById('cartSidebar').classList.toggle('open')}
 
 function addToCart(i){
- const item=cart.find(c=>c.name===products[i].name);
- if(item){item.qty++}else{cart.push({...products[i],qty:1})}
- renderCart();
- document.getElementById('cartSidebar').classList.add('open');
+let item=cart.find(c=>c.name===products[i].name);
+item?item.qty++:cart.push({...products[i],qty:1});
+renderCart();toggleCart();
 }
 
 function renderCart(){
- const div=document.getElementById('cartItems');
- div.innerHTML=''; total=0;
- cart.forEach((p,idx)=>{
-  total+=p.price*p.qty;
-  div.innerHTML+=`<div class='cart-item'>
-   ${p.name} (x${p.qty}) - Rs. ${p.price*p.qty}
-   <button onclick='changeQty(${idx},1)'>+</button>
-   <button onclick='changeQty(${idx},-1)'>-</button>
-   <button onclick='removeItem(${idx})'>✖</button>
-  </div>`;
- });
- document.getElementById('total').innerText=total;
+let div=document.getElementById('cartItems');div.innerHTML='';total=0;
+cart.forEach((p,i)=>{
+total+=p.price*p.qty;
+div.innerHTML+=`${p.name} x${p.qty} = Rs ${p.price*p.qty}
+<button onclick='changeQty(${i},1)'>+</button>
+<button onclick='changeQty(${i},-1)'>-</button>
+<button onclick='removeItem(${i})'>✖</button><br>`;
+});
+document.getElementById('total').innerText=total;
 }
 
-function changeQty(i,val){cart[i].qty+=val;if(cart[i].qty<=0)cart.splice(i,1);renderCart()}
+function changeQty(i,v){cart[i].qty+=v;if(cart[i].qty<=0)cart.splice(i,1);renderCart()}
 function removeItem(i){cart.splice(i,1);renderCart()}
 
 function placeOrder(){
- const name=document.getElementById('name').value;
- const phone=document.getElementById('phone').value;
- const address=document.getElementById('address').value;
- let msg=`Order from ${name}%0APhone: ${phone}%0AAddress: ${address}%0AItems:%0A`;
- cart.forEach(p=>msg+=`- ${p.name} x${p.qty} = Rs. ${p.price*p.qty}%0A`);
- msg+=`Total: Rs. ${total}`;
- window.open(`https://wa.me/923457823510?text=${msg}`);
+if(!cart.length){alert('Cart empty');return}
+window.open('https://wa.me/923457823510');
+cart=[];renderCart();toggleCart();
+document.getElementById('thankYou').style.display='flex';
 }
+
+function closeThankYou(){document.getElementById('thankYou').style.display='none'}
 </script>
 </body>
 </html>
