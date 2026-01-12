@@ -97,6 +97,7 @@ const grid=document.getElementById('productsGrid');
 let cart=[];
 let total=0;
 
+document.addEventListener('DOMContentLoaded',()=>{
 products.forEach((p,i)=>{
  grid.innerHTML+=`<div class='product-card'>
  <span class='badge'>New</span>
@@ -106,6 +107,7 @@ products.forEach((p,i)=>{
  <div class='price'>Rs. ${p.price}</div>
  <button onclick='addToCart(${i})'>Add to Cart</button>
  </div></div>`;
+});
 });
 
 function toggleCart(){document.getElementById('cartSidebar').classList.toggle('open')}
