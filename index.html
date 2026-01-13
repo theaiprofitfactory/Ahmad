@@ -149,35 +149,6 @@ function placeOrder(){
  window.open(`https://wa.me/923457823510?text=${msg}`,'_blank');
  cart=[]; renderCart(); toggleCart();
 }
-</script><script>
-document.addEventListener("DOMContentLoaded", function () {
-
-  const productsGrid = document.getElementById("productsGrid");
-
-  const products = [
-    {
-      name: "Qul Hu Allah Metal Wall Art",
-      price: 6800,
-      img: "images/qul-hu-allah-complete-metal-wall-art.jpg"
-    }
-  ];
-
-  products.forEach(p => {
-    const card = document.createElement("div");
-    card.className = "product-card";
-    card.innerHTML = `
-      <span class="badge">New</span>
-      <img src="${p.img}">
-      <div class="card-body">
-        <h3>${p.name}</h3>
-        <div class="price">Rs. ${p.price}</div>
-        <button>Add to Cart</button>
-      </div>
-    `;
-    productsGrid.appendChild(card);
-  });
-
-});
 </script>
 </body>
 </html>
